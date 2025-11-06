@@ -24,5 +24,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('permintaan', PermintaanController::class);
     Route::resource('produksi', ProduksiController::class);
 
-    Route::get('/forecast/export/pdf/{id}', [ForecastController::class, 'exportPDF'])->name('forecast.export.pdf');
+    Route::get('/forecast/pdf/export', [ForecastController::class, 'exportPdf'])->name('forecast.export');
 });

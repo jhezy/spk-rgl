@@ -12,20 +12,34 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito:400,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=Merriweather:400,500,700&display=swap" rel="stylesheet">
+
 
     <!-- Bootstrap + Vite -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <style>
         body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Merriweather', serif;
+
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+            min-height: 100vh;
+            margin: 0;
         }
 
+        /* Navbar Glassmorphism */
         .navbar {
-            background-color: #ffffff !important;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.25) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: background 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(5px);
         }
 
         .navbar-brand {
@@ -35,7 +49,7 @@
         }
 
         .nav-link {
-            color: #555 !important;
+            color: #444 !important;
             font-weight: 500;
             transition: color 0.2s ease;
         }
@@ -45,9 +59,12 @@
         }
 
         .dropdown-menu {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 0.5rem;
-            border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
         main {
@@ -70,7 +87,7 @@
         <nav class="navbar navbar-expand-md navbar-light shadow-sm sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <i class="bi bi-graph-up"></i> SPK RLG
+                    SPK RLG
                 </a>
 
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
@@ -94,14 +111,8 @@
                     <ul class="navbar-nav ms-auto">
                         @guest
                         @if (Route::has('login'))
-                        <!-- <li class="nav-item">
-                            <a class="nav-link fw-semibold text-primary" href="{{ route('login') }}">Login</a>
-                        </li> -->
                         @endif
                         @if (Route::has('register'))
-                        <!-- <li class="nav-item">
-                            <a class="nav-link fw-semibold text-primary" href="{{ route('register') }}">Register</a>
-                        </li> -->
                         @endif
                         @else
                         <li class="nav-item dropdown">
@@ -134,8 +145,21 @@
         </main>
     </div>
 
-    <!-- Optional: Bootstrap Icons -->
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script>
+        // Efek berubah saat scroll
+        window.addEventListener("scroll", function() {
+            const navbar = document.querySelector(".navbar");
+            if (window.scrollY > 30) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+        });
+    </script>
+
     @stack('scripts')
 </body>
 

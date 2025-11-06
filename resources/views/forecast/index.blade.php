@@ -59,7 +59,7 @@
                         <div class="mt-2">
                             <button type="submit"
                                 class="btn btn-primary btn-lg w-100  rounded-3 shadow-sm d-flex justify-content-center align-items-center ">
-                                <i class="bi bi-graph-up fs-5"></i>
+
                                 <span>Proses Forecast</span>
                             </button>
                         </div>
@@ -93,12 +93,12 @@
                             </tr>
                             <tr>
                                 <th class="text-muted ps-4">Prediksi Y (Produksi)</th>
-                                <td><strong class="text-primary">{{ number_format($forecast['y_pred'], 4) }}</strong></td>
+                                <td><strong class="text-primary">{{ number_format($forecast['y_pred']) }} </strong></td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <th class="text-muted ps-4 small">ID Peramalan</th>
                                 <td class="text-muted small">{{ $forecast['peramalan_id'] }}</td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>
@@ -116,15 +116,15 @@
                         <tbody>
                             <tr>
                                 <th class="text-muted w-50 ps-4">a (intercept)</th>
-                                <td><strong>{{ number_format($coeffs['a'], 6) }}</strong></td>
+                                <td><strong>{{ number_format($coeffs['a'], 10) }}</strong></td>
                             </tr>
                             <tr>
                                 <th class="text-muted ps-4">b₁ (Penjualan)</th>
-                                <td><strong>{{ number_format($coeffs['b1'], 6) }}</strong></td>
+                                <td><strong>{{ number_format($coeffs['b1'], 10) }}</strong></td>
                             </tr>
                             <tr>
                                 <th class="text-muted ps-4">b₂ (Permintaan)</th>
-                                <td><strong>{{ number_format($coeffs['b2'], 6) }}</strong></td>
+                                <td><strong>{{ number_format($coeffs['b2'], 10) }}</strong></td>
                             </tr>
                         </tbody>
                     </table>
@@ -165,6 +165,102 @@
 
     </div>
 
+    <!-- {{-- Detail Perhitungan Regresi --}}
+    @isset($regcalc)
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-header bg-light fw-semibold">
+            <i class="bi bi-calculator"></i> Detail Perhitungan Regresi Linear Berganda
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Variabel</th>
+                            <th>Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Σ X₁</td>
+                            <td>{{ $regcalc['sum_x1'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Σ X₂</td>
+                            <td>{{ $regcalc['sum_x2'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Σ Y</td>
+                            <td>{{ $regcalc['sum_y'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Σ X₁²</td>
+                            <td>{{ $regcalc['sum_x1_sq'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Σ X₂²</td>
+                            <td>{{ $regcalc['sum_x2_sq'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Σ X₁ * X₂</td>
+                            <td>{{ $regcalc['sum_x1_x2'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Σ X₁ * Y</td>
+                            <td>{{ $regcalc['sum_x1_y'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Σ X₂ * Y</td>
+                            <td>{{ $regcalc['sum_x2_y'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> -->
+
+
+    <!-- {{-- Detail Evaluasi Model --}}
+    @isset($evalDetail)
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-header bg-light fw-semibold">
+            <i class="bi bi-bar-chart"></i> Detail Perhitungan Evaluasi Model
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Metode</th>
+                            <th>Perhitungan</th>
+                            <th>Hasil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MAD</td>
+                            <td>Σ |Y - Ŷ| / n</td>
+                            <td>{{ number_format($eval['MAD'], 6) }}</td>
+                        </tr>
+                        <tr>
+                            <td>MSE</td>
+                            <td>Σ (Y - Ŷ)² / n</td>
+                            <td>{{ number_format($eval['MSE'], 6) }}</td>
+                        </tr>
+                        <tr>
+                            <td>MAPE</td>
+                            <td>Σ(|Y - Ŷ| / Y) × 100 / n</td>
+                            <td>{{ $eval['MAPE'] !== null ? number_format($eval['MAPE'],6).' %' : 'N/A' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @endisset -->
+    @endisset
+
+
 
 
 
@@ -200,10 +296,9 @@
     </div>
     {{-- tombol export --}}
     <div class="p-3 text-center">
-        <a href="{{ route('forecast.export.pdf', $forecast['peramalan_id']) }}"
-            class="btn btn-danger btn-sm rounded-3 shadow-sm">
-            <i class="bi bi-filetype-pdf me-1"></i> Export PDF
-        </a>
+        <a href="{{ route('forecast.export') }}" class="btn btn-danger">Export PDF</a>
+
+
     </div>
     @endisset
 
